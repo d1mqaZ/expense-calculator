@@ -119,7 +119,9 @@
 
         .button-group {
             display: flex;
-            gap: 12px;
+            flex-direction: column;
+            align-items: stretch;
+            gap: 8px;
             margin-top: 20px;
         }
 
@@ -131,10 +133,10 @@
             font-weight: 500;
             cursor: pointer;
             transition: background 0.2s;
+            width: 100%;
         }
 
         .calculate-btn {
-            flex: 1;
             background: var(--accent);
             color: white;
         }
@@ -146,33 +148,26 @@
         .pdf-btn {
             background: #28a745;
             color: white;
+            width: 100%;
+            padding: 14px 14px 8px 14px;
+            text-align: center; /* Центрируем текст */
         }
 
         .pdf-btn:hover {
             background: #218838;
         }
 
-        /* Подсказка при наведении */
-        .pdf-btn::after {
-            content: attr(data-title);
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #333;
-            color: white;
-            padding: 8px 12px;
-            border-radius: 4px;
-            font-size: 14px;
-            white-space: nowrap;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.2s;
-            z-index: 1000;
+        .pdf-btn-text {
+            display: block;
+            margin-bottom: 4px;
         }
 
-        .pdf-btn:hover::after {
-            opacity: 1;
+        .pdf-hint {
+            color: white;
+            font-size: 11px;
+            margin-top: 4px;
+            text-align: center; /* Центрируем подсказку */
+            width: 100%;
         }
 
         .results-section {
@@ -214,6 +209,17 @@
             .form-grid {
                 grid-template-columns: repeat(3, 1fr);
             }
+
+            .button-group {
+                flex-direction: row;
+                align-items: center;
+            }
+
+            .pdf-hint {
+                order: 2;
+                margin-top: 0;
+                text-align: center;
+            }
         }
 
         @media (max-width: 1023px) and (min-width: 768px) {
@@ -253,6 +259,7 @@
 
             .button-group {
                 flex-direction: column;
+                align-items: stretch;
             }
         }
 
@@ -535,7 +542,10 @@
 
             <div class="button-group">
                 <button class="calculate-btn" onclick="calculate()">🚀 Рассчитать</button>
-                <button class="pdf-btn" data-title="в поле &quot;Принтер&quot; выберите &quot;Сохранить как PDF&quot;" onclick="printWithAllData()">📄 Сохранить как PDF</button>
+                <button class="pdf-btn" onclick="printWithAllData()">
+                    <span class="pdf-btn-text">📄 Сохранить результаты в формате PDF</span>
+                    <div class="pdf-hint">Чтобы сохранить в формате PDF, в поле "Принтер" выберите "Сохранить как PDF"</div>
+                </button>
             </div>
         </section>
 
