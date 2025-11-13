@@ -150,7 +150,7 @@
             color: white;
             width: 100%;
             padding: 14px 14px 8px 14px;
-            text-align: center; /* Центрируем текст */
+            text-align: center;
         }
 
         .pdf-btn:hover {
@@ -166,7 +166,7 @@
             color: white;
             font-size: 11px;
             margin-top: 4px;
-            text-align: center; /* Центрируем подсказку */
+            text-align: center;
             width: 100%;
         }
 
@@ -204,7 +204,6 @@
             color: #0d4a7f;
         }
 
-        /* Адаптация под разные размеры экрана */
         @media (min-width: 1024px) {
             .form-grid {
                 grid-template-columns: repeat(3, 1fr);
@@ -295,7 +294,6 @@
             }
         }
 
-        /* Стили для печати */
         @media print {
             body {
                 background: white;
@@ -362,7 +360,6 @@
                 font-size: 14px;
             }
 
-            /* Выводим все поля ввода при печати */
             .print-data {
                 page-break-inside: avoid;
                 margin-bottom: 20px;
@@ -595,12 +592,11 @@
             const A = L_cm * W_cm; // площадь в см²
 
             const V_dry = (A * dft) / 10000; // объём сухой плёнки в см³
-            const rho_dry = m_dry / V_dry; // плотность сухой плёнки (внутри используется)
+            const rho_dry = m_dry / V_dry; // плотность сухой плёнки
 
-            // Преобразуем процент в долю
-            const ms = ms_percent / 100;
-
-            const vs_percent = (ms / rho_dry) * rho_wet * 100; // объёмное содержание сухого остатка в %
+            // ИСПРАВЛЕННЫЙ РАСЧЁТ: Объёмное содержание сухого остатка
+            const volume_wet = m_wet / rho_wet; // объём мокрой краски в см³
+            const vs_percent = (V_dry / volume_wet) * 100; // объёмное содержание сухого остатка в %
 
             // Расход без учёта контрастности
             const R_no_contrast = dft / (10 * vs_percent);
@@ -641,6 +637,18 @@
                     <span class="result-value">${A.toFixed(2)} см²</span>
                 </div>
                 <div class="result-item">
+                    <span class="result-label">Плотность сухой плёнки:</span>
+                    <span class="result-value">${rho_dry.toFixed(4)} г/см³</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Объём мокрой краски:</span>
+                    <span class="result-value">${volume_wet.toFixed(4)} см³</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Объём сухой плёнки:</span>
+                    <span class="result-value">${V_dry.toFixed(4)} см³</span>
+                </div>
+                <div class="result-item">
                     <span class="result-label">Расчетное ОДНВ:</span>
                     <span class="result-value">${vs_percent.toFixed(2)}%</span>
                 </div>
@@ -656,7 +664,6 @@
         }
 
         function printWithAllData() {
-            // Создаём окно для печати
             const printWindow = window.open('', '_blank');
             printWindow.document.write(`
                 <!DOCTYPE html>
@@ -753,7 +760,6 @@
                         <p>Результаты расчёта</p>
                     </div>
 
-                    <!-- Данные для расчета -->
                     <div class="print-data">
                         <h3>📊 Данные для расчета</h3>
                         <div class="print-data-grid">
@@ -796,7 +802,6 @@
                         </div>
                     </div>
 
-                    <!-- Результаты -->
                     <div id="print-results">
                         ${document.getElementById('result').innerHTML}
                     </div>
@@ -807,7 +812,6 @@
             printWindow.print();
         }
 
-        // Автоматически рассчитать при загрузке страницы
         window.onload = calculate;
     </script>
 
